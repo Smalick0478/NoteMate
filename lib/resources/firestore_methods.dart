@@ -123,6 +123,16 @@ class FirestoreService {
     return null;
   }
 
+  Future<String?> deleteSingleNote(
+      {required String uid}) async {
+    try {
+      await _firestore.collection(userUid).doc(uid).delete();
+    } on FirebaseException catch (e) {
+      return e.message;
+    }
+    return null;
+  }
+
   Future<String?> deleteAllDocs(String uid) async {
     try {
       await _firestore.collection(userUid).get().then((value) {
