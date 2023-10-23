@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:notemate/resources/firestore_methods.dart';
+import 'package:notemate/utils/colors.dart';
 import 'package:notemate/widgets/notesRelated/custom_app_bar.dart';
 import 'package:notemate/widgets/notesRelated/note_header.dart';
 import 'package:notemate/widgets/reusedComponents/snackbar.dart';
@@ -53,6 +54,13 @@ class _CreateNoteState extends State<CreateNote> {
                         context, '$value', Duration(seconds: 2));
                   }
                   Navigator.pop(context);
+                  CustomSnackBarColored.show(
+                    context,
+                    'Success',
+                    'Note Added Successfully',
+                    const Duration(seconds: 3),
+                    CustomTheme.successColor, // Specify the background color
+                  );
                 });
               }),
               NoteHeader(

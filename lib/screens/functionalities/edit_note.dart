@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:notemate/resources/firestore_methods.dart';
 import 'package:notemate/screens/errorAndLoading/error_screen.dart';
 import 'package:notemate/screens/errorAndLoading/loading_screen.dart';
+import 'package:notemate/utils/colors.dart';
 import 'package:notemate/widgets/notesRelated/custom_app_bar.dart';
 import 'package:notemate/widgets/notesRelated/note_header.dart';
 import 'package:notemate/widgets/reusedComponents/snackbar.dart';
@@ -50,28 +51,39 @@ class EditNoteState extends ConsumerState<EditNote> {
             SliverFillRemaining(
               child: Column(
                 children: [
-                  CustomAppBar(onPressed: () async {
-                    String json =
-                        jsonEncode(_controller.document.toDelta().toJson());
-                    String plainText =
-                        jsonEncode(_controller.document.toPlainText());
-                    await FirestoreService()
-                        .updateDocument(
-                            previousFolder: previousFolder,
-                            folder: selected.value,
-                            searchableDocument: plainText,
-                            document: json,
-                            title: _titleController.text,
-                            noteUid: widget.noteUid,
-                            date: DateTime.now())
-                        .then((value) {
-                      if (value != null) {
-                        CustomSnackBar.show(
-                            context, '$value', Duration(seconds: 2));
-                      }
-                      Navigator.of(context).pop();
-                    });
-                  }),
+                  CustomAppBar(
+                      noteuid: widget.noteUid,
+                      folderNoteuid: selected.value,
+                      onPressed: () async {
+                        String json =
+                            jsonEncode(_controller.document.toDelta().toJson());
+                        String plainText =
+                            jsonEncode(_controller.document.toPlainText());
+                        await FirestoreService()
+                            .updateDocument(
+                                previousFolder: previousFolder,
+                                folder: selected.value,
+                                searchableDocument: plainText,
+                                document: json,
+                                title: _titleController.text,
+                                noteUid: widget.noteUid,
+                                date: DateTime.now())
+                            .then((value) {
+                          if (value != null) {
+                            CustomSnackBar.show(
+                                context, '$value', Duration(seconds: 2));
+                          }
+                          Navigator.of(context).pop();
+                          CustomSnackBarColored.show(
+                            context,
+                            'Success',
+                            'Note Updated Successfully',
+                            const Duration(seconds: 3),
+                            CustomTheme
+                                .successColor, // Specify the background color
+                          );
+                        });
+                      }),
                   NoteHeader(
                       editNoteMod: true,
                       titleController: _titleController,
