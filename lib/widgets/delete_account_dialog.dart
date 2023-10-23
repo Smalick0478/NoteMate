@@ -55,6 +55,7 @@ class deleteAccountDialog extends StatelessWidget {
             },
             child: Text(
               'Cancel',
+              style: TextStyle(color: Colors.white),
             )),
         TextButton(
             onPressed: () async {
