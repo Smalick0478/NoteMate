@@ -170,6 +170,7 @@ class _NoteCardsState extends State<NoteCards> {
               }));
         }),
         error: ((error, stackTrace) => ErrorPage()),
+        //loading: (() => const LoadingScreen())
         loading: (() => const LoadingScreen()));
   }
 }
