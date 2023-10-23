@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notemate/resources/auth_methods.dart';
+import 'package:notemate/utils/colors.dart';
 import 'package:notemate/utils/regex.dart';
 import 'package:notemate/widgets/reusedComponents/input_text_field.dart';
 import 'package:notemate/widgets/reusedComponents/sign_button.dart';
@@ -46,7 +47,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               height: 50,
             ),
             Text(
-              'Rest Password',
+              'Reset Password',
               textAlign: TextAlign.center,
               style: GoogleFonts.quicksand(fontSize: 30),
             ),
@@ -97,7 +98,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 child: CustomButton(
                     backgroundColor: Theme.of(context).primaryColor,
                     labelColor: Colors.white,
-                    child: const Text('Send Rest Email'),
+                    child: const Text('Send Email'),
                     isRounded: true,
                     onTap: () async {
                       if (_key.currentState!.validate() == true) {
@@ -105,12 +106,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             .restPassword(_controller.text)
                             .then((value) {
                           Navigator.of(context).pop();
-                          CustomSnackBar.show(
+                          CustomSnackBarColored.show(
                               context,
+                              value == null ? 'Success' : 'Error Occured',
                               value == null
-                                  ? 'Rest email sent successfully, check your inbox/spam!'
-                                  : '$value',
-                              Duration(seconds: 3));
+                                  ? 'Email sent successfully, check your inbox/spam!'
+                                  : 'Please Try Again Later',
+                              Duration(seconds: 3),
+                              value == null
+                                  ? CustomTheme.successColor
+                                  : CustomTheme.dangerColor);
                         });
                       }
                     }))
