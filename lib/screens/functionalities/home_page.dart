@@ -70,6 +70,13 @@ class _HomePageState extends State<HomePage>
                             child: const Text('Clear All notes'),
                           ),
                           PopupMenuItem(
+                            onTap: () {
+                              Navigator.pushNamed(context, 'Settings');
+                            },
+                            value: 1,
+                            child: const Text('Settings'),
+                          ),
+                          PopupMenuItem(
                               onTap: () async {
                                 await AuthService().reloadUser();
                                 await AuthService().signOut().then((value) {
