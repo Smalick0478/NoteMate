@@ -5,7 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notemate/screens/authentication/login_screen.dart';
 import 'package:notemate/screens/authentication/signup_screen.dart';
+import 'package:notemate/screens/functionalities/helpScreen.dart';
 import 'package:notemate/screens/functionalities/home_page.dart';
+import 'package:notemate/screens/functionalities/privacy_policy_screen.dart';
+import 'package:notemate/screens/functionalities/settings.dart';
+import 'package:notemate/screens/functionalities/terms_of_use_screen.dart';
 import 'package:notemate/screens/wrapper.dart';
 import 'package:notemate/utils/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +43,11 @@ class MyApp extends StatelessWidget {
       routes: {
         'Login': (context) => const LoginScreen(),
         'Sign up': (context) => const SignUpScreen(),
-        'Home page': (context) => const HomePage()
+        'Home page': (context) => const HomePage(),
+        'Settings': (context) => const SettingsScreen(),
+        'Help Screen': (context) => HelpScreen(),
+        'Privacy Policy': (context) => PrivacyPolicyScreen(),
+        'Terms & Conditions': (context) => TermsOfUseScreen(),
       },
     );
   }
