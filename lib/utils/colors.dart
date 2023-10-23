@@ -6,6 +6,8 @@ class CustomTheme {
       const Color.fromRGBO(251, 221, 221, 1.0); // Define the 'dangerColor'
   static Color get successColor =>
       const Color.fromRGBO(226, 245, 234, 1.0); // Define the 'dangerColor'
+  static Color get titleColor =>
+      const Color.fromARGB(255, 255, 255, 255); // Define the 'dangerColor'
   static ThemeData get DarkTheme {
     return ThemeData(
       dialogBackgroundColor: Color.fromRGBO(31, 29, 43, 1),
