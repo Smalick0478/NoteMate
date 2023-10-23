@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTheme {
+  static Color get dangerColor =>
+      const Color.fromRGBO(251, 221, 221, 1.0); // Define the 'dangerColor'
+  static Color get successColor =>
+      const Color.fromRGBO(226, 245, 234, 1.0); // Define the 'dangerColor'
   static ThemeData get DarkTheme {
     return ThemeData(
       dialogBackgroundColor: Color.fromRGBO(31, 29, 43, 1),
@@ -24,6 +28,7 @@ class CustomTheme {
       hintColor: const Color.fromARGB(255, 187, 187, 242),
       textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
       cardColor: const Color.fromRGBO(39, 38, 53, 1), //color of the container
+
       scaffoldBackgroundColor:
           const Color.fromRGBO(31, 29, 43, 1), //background color
       primaryColor: const Color.fromRGBO(111, 111, 200, 1), //color of buttons
