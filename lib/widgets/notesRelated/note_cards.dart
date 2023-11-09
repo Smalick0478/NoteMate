@@ -18,6 +18,7 @@ import 'package:jiffy/jiffy.dart';
 
 class NoteCards extends StatefulWidget {
   final AsyncValue<QuerySnapshot<Map<String, dynamic>>> snapshot;
+
   NoteCards(this.snapshot);
 
   @override
