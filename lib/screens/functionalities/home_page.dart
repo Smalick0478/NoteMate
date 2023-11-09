@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:notemate/providers/admob_controller.dart';
 import 'package:notemate/resources/auth_methods.dart';
 import 'package:notemate/resources/firestore_methods.dart';
 import 'package:notemate/screens/authentication/introduction_screen.dart';
 import 'package:notemate/screens/functionalities/create_note.dart';
 import 'package:notemate/widgets/delete_account_dialog.dart';
+import 'package:notemate/widgets/notesRelated/notes_search.dart';
 import 'package:notemate/widgets/reusedComponents/animation_transition.dart';
 import 'package:notemate/widgets/foldersRelated/folders._tab.dart';
 import 'package:notemate/widgets/notesRelated/notes_tab.dart';
@@ -25,7 +30,21 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    admobcontroller.loadAd();
     super.initState();
+  }
+
+  final admobcontroller = Get.put(AdmobController());
+  Future<Widget> _banner() async {
+    await admobcontroller.bannerAd.value.dispose();
+    await admobcontroller.loadBanner();
+
+    return Container(
+      alignment: Alignment.center,
+      height: admobcontroller.bannerAd.value.size.height.toDouble(),
+      width: admobcontroller.bannerAd.value.size.width.toDouble(),
+      child: AdWidget(ad: admobcontroller.bannerAd.value),
+    );
   }
 
   @override
@@ -37,6 +56,7 @@ class _HomePageState extends State<HomePage>
               padding: const EdgeInsets.only(right: 15, bottom: 15),
               child: FloatingActionButton(
                 onPressed: () {
+                  admobcontroller.interstitialAd?.show(); //!Interstital Ad Code
                   Navigator.of(context).push(FadeTrans(
                       translateTo: const CreateNote(),
                       duration: Duration(milliseconds: 800)));
@@ -61,13 +81,25 @@ class _HomePageState extends State<HomePage>
                   ),
                   const Expanded(child: SizedBox()),
                   PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                    ),
                     itemBuilder: ((context) => [
+                          // PopupMenuItem(
+                          //   onTap: () async {
+                          //     await FirestoreService().clearAllNotes();
+                          //   },
+                          //   value: 1,
+                          //   child: const Text('Clear All notes'),
+                          // ),
                           PopupMenuItem(
-                            onTap: () async {
-                              await FirestoreService().clearAllNotes();
+                            onTap: () {
+                              Navigator.pushNamed(context, 'Search');
                             },
                             value: 1,
-                            child: const Text('Clear All notes'),
+                            child: const Text('Search Notes'),
                           ),
                           PopupMenuItem(
                             onTap: () {
@@ -76,37 +108,37 @@ class _HomePageState extends State<HomePage>
                             value: 1,
                             child: const Text('Settings'),
                           ),
-                          PopupMenuItem(
-                              onTap: () async {
-                                await AuthService().reloadUser();
-                                await AuthService().signOut().then((value) {
-                                  if (value != null) {
-                                    CustomSnackBar.show(
-                                        context, value, Duration(seconds: 2));
-                                  }
-                                });
-                                FadeTrans(translateTo: IntroductionScreen());
-                              },
-                              value: 2,
-                              child: const Text('Sign out')),
-                          PopupMenuItem(
-                            onTap: () async {
-                              Future.delayed(
-                                  Duration(seconds: 0),
-                                  (() => showDialog(
-                                      context: context,
-                                      builder: (dialogContext) {
-                                        return deleteAccountDialog();
-                                      })));
-                            },
-                            value: 3,
-                            child: const Text(
-                              'Delete Account',
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          )
+                          // PopupMenuItem(
+                          //     onTap: () async {
+                          //       await AuthService().reloadUser();
+                          //       await AuthService().signOut().then((value) {
+                          //         if (value != null) {
+                          //           CustomSnackBar.show(
+                          //               context, value, Duration(seconds: 2));
+                          //         }
+                          //       });
+                          //       FadeTrans(translateTo: IntroductionScreen());
+                          //     },
+                          //     value: 2,
+                          //     child: const Text('Sign out')),
+                          // PopupMenuItem(
+                          //   onTap: () async {
+                          //     Future.delayed(
+                          //         Duration(seconds: 0),
+                          //         (() => showDialog(
+                          //             context: context,
+                          //             builder: (dialogContext) {
+                          //               return deleteAccountDialog();
+                          //             })));
+                          //   },
+                          //   value: 3,
+                          //   child: const Text(
+                          //     'Delete Account',
+                          //     style: TextStyle(
+                          //         color: Colors.red,
+                          //         fontWeight: FontWeight.w600),
+                          //   ),
+                          // )
                         ]),
                     child: Padding(
                       padding: const EdgeInsets.only(right: 15, left: 5),
@@ -122,6 +154,20 @@ class _HomePageState extends State<HomePage>
               const SizedBox(
                 height: 50,
               ),
+              //!Banner Ad
+              FutureBuilder(
+                  future: _banner(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox(height: 50);
+                    }
+                    if (snapshot.data == null) {
+                      return const SizedBox(height: 50);
+                    }
+                    return snapshot.data as Widget;
+                  }),
+              //!Banner Ad
+
               TabBar(
                 //isScrollable: true,
                 //labelColor: Colors.white,
@@ -145,7 +191,7 @@ class _HomePageState extends State<HomePage>
                           style: GoogleFonts.roboto(
                               letterSpacing: 1,
                               fontSize: 17,
-                              fontWeight: FontWeight.w500)))
+                              fontWeight: FontWeight.w500))),
                 ],
                 indicator: MaterialIndicator(
                     color: Theme.of(context).tabBarTheme.labelColor!,
@@ -157,9 +203,10 @@ class _HomePageState extends State<HomePage>
                 height: 25,
               ),
               Expanded(
-                child: TabBarView(
-                    controller: _tabController,
-                    children: const [NotesTab(), FoldersTab()]),
+                child: TabBarView(controller: _tabController, children: const [
+                  NotesTab(),
+                  FoldersTab(),
+                ]),
               )
             ])));
   }
