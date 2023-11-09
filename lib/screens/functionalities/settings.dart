@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icon(Icons.arrow_back_ios_new_outlined),
               tooltip: 'Go Back',
               onPressed: () {
-                Navigator.pushNamed(context, 'Home page');
+                Navigator.of(context).pop();
               },
             ),
           ),
@@ -102,6 +102,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     onTap: () => {
                       Navigator.of(context).pushNamed('Terms & Conditions'),
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.library_books,
+                      color: Color.fromARGB(255, 152, 137, 249),
+                    ),
+                    title: const Text(
+                      'FAQs Section',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () => {
+                      Navigator.of(context).pushNamed('FAQs'),
                     },
                   ),
                   ListTile(
