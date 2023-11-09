@@ -69,6 +69,7 @@ class LoginDetails extends StatefulWidget {
 class _LoginDetailsState extends State<LoginDetails> {
   final _key = GlobalKey<FormState>();
   bool isWaiting = false;
+  bool isPassword = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 //------------------------------------------------------------------------
@@ -99,6 +100,12 @@ class _LoginDetailsState extends State<LoginDetails> {
   void changeIsWaiting() {
     setState(() {
       isWaiting = !isWaiting;
+    });
+  }
+
+  void togglePasswordVisibility() {
+    setState(() {
+      isPassword = !isPassword;
     });
   }
 
@@ -159,7 +166,12 @@ class _LoginDetailsState extends State<LoginDetails> {
                     toNextField: false,
                     keyboardType: TextInputType.text,
                     hintText: 'Password',
-                    isPassword: true,
+                    isPassword: isPassword,
+                    suffixIcon: IconButton(
+                      onPressed: togglePasswordVisibility,
+                      icon: Icon(
+                          isPassword ? Icons.visibility : Icons.visibility_off),
+                    ),
                     validator: (text) {
                       if (passwordRegExp.hasMatch(text!)) {
                         return null;
