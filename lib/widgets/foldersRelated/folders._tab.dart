@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notemate/providers/admob_controller.dart';
 import 'package:notemate/providers/folders_provider.dart';
 import 'package:notemate/resources/firstore_folder_methods.dart';
 import 'package:notemate/screens/errorAndLoading/error_screen.dart';
@@ -21,7 +23,7 @@ class FoldersTab extends StatefulWidget {
 class _FoldersTabState extends State<FoldersTab> {
   final TextEditingController folderController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
+  final admobcontroller = Get.put(AdmobController());
   @override
   void dispose() {
     folderController.dispose();
@@ -55,6 +57,7 @@ class _FoldersTabState extends State<FoldersTab> {
                         //the last item is the add button
                         return GestureDetector(
                           onTap: () {
+                            admobcontroller.loadRewardedAd();
                             showDialog(
                                 context: context,
                                 builder: ((context) => FolderDialog(
@@ -106,8 +109,7 @@ class _FoldersTabState extends State<FoldersTab> {
                                       Icons.delete_forever_outlined,
                                       color: Colors.white,
                                     ),
-                                    title:
-                                        const Text('Delete (All notes inside)'),
+                                    title: const Text('Delete'),
                                     onPressed: () async {
                                       await FirestoreFolderService()
                                           .deleteFolder(keys[index]);
