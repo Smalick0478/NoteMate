@@ -8,24 +8,30 @@ import 'package:notemate/screens/authentication/signup_screen.dart';
 import 'package:notemate/screens/functionalities/helpScreen.dart';
 import 'package:notemate/screens/functionalities/home_page.dart';
 import 'package:notemate/screens/functionalities/privacy_policy_screen.dart';
+import 'package:notemate/screens/functionalities/information.dart';
 import 'package:notemate/screens/functionalities/settings.dart';
 import 'package:notemate/screens/functionalities/terms_of_use_screen.dart';
 import 'package:notemate/screens/wrapper.dart';
 import 'package:notemate/utils/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notemate/utils/firebase_notification.dart';
+import 'package:notemate/widgets/notesRelated/notes_search.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+  // await FirebaseApi().initNotifications();
   FlutterError.onError = (details) {
     //whenever there's an error, exit the app
     FlutterError.presentError(details);
     if (kReleaseMode) exit(1);
   };
-  runApp(ProviderScope(
-      child: DevicePreview(
-          enabled: !kReleaseMode, builder: ((context) => MyApp()))));
+  // runApp(ProviderScope(
+  //     child: DevicePreview(
+  //         enabled: !kReleaseMode, builder: ((context) => MyApp()))));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,9 +41,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
+      //locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
-      builder: DevicePreview.appBuilder,
+      //builder: DevicePreview.appBuilder,
       theme: CustomTheme.DarkTheme,
       home: const Wrapper(),
       routes: {
@@ -48,6 +54,8 @@ class MyApp extends StatelessWidget {
         'Help Screen': (context) => HelpScreen(),
         'Privacy Policy': (context) => PrivacyPolicyScreen(),
         'Terms & Conditions': (context) => TermsOfUseScreen(),
+        'FAQs': (context) => InformationDialog(),
+        'Search': (context) => LiveSearchScreen(),
       },
     );
   }
