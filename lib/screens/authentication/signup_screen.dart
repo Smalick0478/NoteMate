@@ -97,6 +97,21 @@ class _SignUpDetailsState extends State<SignUpDetails> {
     super.dispose();
   }
 
+  bool isPassword = true;
+  bool isConfirmPassword = true;
+
+  void togglePasswordVisibility() {
+    setState(() {
+      isPassword = !isPassword;
+    });
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    setState(() {
+      isConfirmPassword = !isConfirmPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -133,7 +148,12 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                     toNextField: true,
                     keyboardType: TextInputType.text,
                     hintText: 'Password',
-                    isPassword: true,
+                    isPassword: isPassword,
+                    suffixIcon: IconButton(
+                      onPressed: togglePasswordVisibility,
+                      icon: Icon(
+                          isPassword ? Icons.visibility : Icons.visibility_off),
+                    ),
                     validator: (text) {
                       if (passwordRegExp.hasMatch(text!)) {
                         return null;
@@ -149,7 +169,13 @@ class _SignUpDetailsState extends State<SignUpDetails> {
                     toNextField: false,
                     keyboardType: TextInputType.text,
                     hintText: 'Confirm Password',
-                    isPassword: true,
+                    isPassword: isConfirmPassword,
+                    suffixIcon: IconButton(
+                      onPressed: toggleConfirmPasswordVisibility,
+                      icon: Icon(isConfirmPassword
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                    ),
                     validator: (text) {
                       if (passwordRegExp.hasMatch(text!) &&
                           passwordController.text ==
